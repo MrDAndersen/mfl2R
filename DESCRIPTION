@@ -1,0 +1,18 @@
+Package: mfl2R
+Type: Package
+Title: Wrapper for MyFantasyLeague API
+Version: 0.1.0
+Author: Dennis Andersen <andersen.dennis@live.com>
+Maintainer: Dennis Andersen <andersen.dennis@live.com>
+Description: Allows users to extract data from MyFantasyLeague.com via their open API
+License: GPL
+Encoding: UTF-8
+LazyData: true
+Depends: tidyverse, httr
+Collate: 
+    'endpoint.R'
+    'helpers.R'
+    'league.R'
+    'mfl2R.R'
+    'player.R'
+RoxygenNote: 6.1.1
