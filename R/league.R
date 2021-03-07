@@ -69,23 +69,23 @@ mfl_league <- R6::R6Class(
           switch(league_var,
                  "franchises" = {
                    self$franchises <- league_response$league$franchises$franchise %>%
-                     map(as.tibble) %>% bind_rows() %>%
+                     map(as_tibble) %>% bind_rows() %>%
                      mutate(name = trimws(cleanFun(name)))
                  },
                  "divisions" = {
                    self$divisions <- league_response$league$divisions$division %>%
-                     map(as.tibble) %>% bind_rows() #%>%
-                     #mutate(name = trimws(cleanFun(name)))
+                     map(as_tibble) %>% bind_rows() %>%
+                     mutate(name = trimws(cleanFun(name)))
                  },
                  "conferences" = {
                    self$conferences <-  league_response$league$conferences$conference %>%
-                     map(as.tibble) %>% bind_rows() %>%
+                     map(as_tibble) %>% bind_rows() %>%
                      mutate(name = trimws(cleanFun(name)))
                  },
 
                  "starters" = {
                                 self$starters <- league_response$league$starters$position %>%
-                     map(as.tibble) %>% bind_rows() %>%
+                     map(as_tibble) %>% bind_rows() %>%
                      extract(limit, c("min", "max"), "([0-9]+)\\-([0-9]+)") %>%
                      `attr<-`("max_starters", league_response$league$starters$count) %>%
                      `attr<-`("idp_starters", league_response$league$starters$idp_starters)
@@ -161,14 +161,14 @@ mfl_league <- R6::R6Class(
       lg_standings <- self$request(private$league_url("leagueStandings"))
 
       lg_standings$leagueStandings$franchise %>%
-        map(as.tibble) %>% bind_rows()
+        map(as_tibble) %>% bind_rows()
     },
 
     rules = function(){
       self$request(private$league_url("rules")) %>%
         `[[`(c("rules", "positionRules"))  %>%
         modify_depth(2, ~ map(.x, ~ map(.x, `[[`, 1))) %>%
-        map( ~ map(.x$rule, as.tibble)  %>% map(add_column, positions = unlist(.x$positions))) %>%
+        map( ~ map(.x$rule, as_tibble)  %>% map(add_column, positions = unlist(.x$positions))) %>%
         map(bind_rows) %>% bind_rows() %>% split(.$positions) %>%
         map(select, -positions)
     },
@@ -178,7 +178,7 @@ mfl_league <- R6::R6Class(
 
       if(self$playerLimitUnit != "LEAGUE"){
         results <- draft %>% .[[c("draftResults", "draftUnit")]] %>%
-          modify_depth(2, ~ map(.x, as.tibble)) %>% modify_depth(2, bind_rows) %>%
+          modify_depth(2, ~ map(.x, as_tibble)) %>% modify_depth(2, bind_rows) %>%
           map(`[[`, "draftPick") %>%
           map(~ if("comments" %in% names(.x)){
             mutate(.x, comments = trimws(cleanFun(str_replace_all(comments, "[:cntrl:]", " "))))
@@ -188,7 +188,7 @@ mfl_league <- R6::R6Class(
                            round1DraftOrder = draft[[c("draftResults", "draftUnit")]][[.y]][["round1DraftOrder"]]))
       } else {
         results <- draft %>% .[[c("draftResults", "draftUnit", "draftPick")]] %>%
-          map(as.tibble) %>% bind_rows() %>%
+          map(as_tibble) %>% bind_rows() %>%
           structure(., unit = draft[[c("draftResults", "draftUnit", "unit")]],
                     draftType = draft[[c("draftResults", "draftUnit", "draftType")]],
                     round1DraftOrder = draft[[c("draftResults", "draftUnit", "round1DraftOrder")]])
@@ -205,7 +205,7 @@ mfl_league <- R6::R6Class(
       draft_pick_list <- self$request(private$league_url("futureDraftPicks"))
 
       draft_pick_list[[c("futureDraftPicks", "franchise")]] %>%
-        map(~ map(.x$futureDraftPick, as.tibble) %>% map(mutate, franchise = .x$id)) %>%
+        map(~ map(.x$futureDraftPick, as_tibble) %>% map(mutate, franchise = .x$id)) %>%
         map(bind_rows) %>% bind_rows() %>% select(-matches("^value$"))
     },
 
@@ -214,7 +214,7 @@ mfl_league <- R6::R6Class(
 
       if(self$playerLimitUnit != "LEAGUE"){
         results <- auction %>% .[[c("auctionResults", "auctionUnit")]] %>%
-          modify_depth(2, ~ map(.x, as.tibble)) %>% modify_depth(2, bind_rows) %>%
+          modify_depth(2, ~ map(.x, as_tibble)) %>% modify_depth(2, bind_rows) %>%
           map(`[[`, "auction") %>%
           map(~ if("comments" %in% names(.x)){
             mutate(.x, comments = trimws(cleanFun(str_replace_all(comments, "[:cntrl:]", " "))))
@@ -222,7 +222,7 @@ mfl_league <- R6::R6Class(
           imap(~ structure(.x, unit = auction[[c("auctionResults", "auctionUnit")]][[.y]][["unit"]]))
       } else {
         results <- auction %>% .[[c("auctionResults", "auctionUnit", "auction")]] %>%
-          map(as.tibble) %>% bind_rows() %>%
+          map(as_tibble) %>% bind_rows() %>%
           structure(., unit = auction[[c("auctionResults", "auctionUnit", "unit")]])
 
         if("comments" %in% names(results)){
@@ -242,6 +242,46 @@ mfl_league <- R6::R6Class(
       }
 
       return(req)
+    },
+
+    draft_xml = function(){
+
+      xml_url <- self$home_url() %>%
+        modify_url(path = paste0("fflnetdynamic", self$season,"/", self$id))
+
+      if(self$playerLimitUnit == "LEAGUE"){
+          xml_file <- "_LEAGUE_draft_results.xml"
+      } else {
+        xml_file <- self[[paste0(tolower(self$playerLimitUnit), "s")]] %>%
+          pull(id) %>% paste0("_", self$playerLimitUnit, ., "_draft_results.xml")
+      }
+
+      url_path <- parse_url(xml_url)$path
+
+      xml_file %>%
+        map_chr(~ modify_url(url = xml_url, path = paste0(url_path, .x)))
+    },
+    live_draft = function(){
+
+      xml_res <- self$draft_xml() %>% map(private$get_xml_draft)
+      if(self$playerLimitUnit == "LEAGUE")
+        return(xml_res[[1]])
+
+      draft_units <- self[[paste0(tolower(self$playerLimitUnit), "s")]] %>%
+        pull(id)
+
+      names(xml_res) <- draft_units
+      xml_res
+    },
+
+    weekly_results = function(week = NULL){
+
+      req_param <- list(JSON = 1)
+      if(!is.null(week))
+        req_param <- list_modify(list(W = week), !!!req_param)
+
+      self$league_request("weeklyResults", req_param) %>%
+        self$request()
     }
   ),
   private = list(
@@ -255,6 +295,28 @@ mfl_league <- R6::R6Class(
     },
     home_path = function(){
       file.path(self$season, "home", self$id, fsep = "/")
+    },
+
+    get_xml_draft = function(xml_url){
+      draft_response <- GET(xml_url)
+      empty_res <- tibble(
+        round = NA_character_, pick = NA_character_, timestamp = NA_character_,
+        franchise= NA_character_, player= NA_character_, comments= NA_character_
+      ) %>% slice(0)
+
+      if(status_code(draft_response) == 404)
+        return(empty_res %>% `attr<-`("status", "Not Started"))
+
+      draft_status <- content(draft_response)  %>%
+        xml_find_first("/draftResults") %>% xml_attrs()
+
+      content(draft_response)  %>%
+        xml_find_all("draftPick") %>%
+        xml_attrs()  %>% map(as.list) %>%
+        map_df(as_tibble) %>%
+        bind_rows(empty_res, .) %>%
+        mutate(comments = str_trim(comments)) %>%
+        `attr<-`("status", draft_status)
     }
   )
 )
@@ -294,6 +356,9 @@ franchises <- function(){
 #' Table of league divisons in active league
 #' @export divisions
 divisions <- function(){
+  if(length(league_app$divisions) == 0)
+    return(slice(tibble(name = NA_character_, id = NA_character_), 0))
+
   return(league_app$divisions %>% mutate_all(str_trim))
 }
 
@@ -302,6 +367,9 @@ divisions <- function(){
 #' Table of league conferences in active league
 #' @export conferences
 conferences <- function(){
+  if(length(league_app$conferences) == 0)
+    return(slice(tibble(name = NA_character_, id = NA_character_), 0))
+
   return(league_app$conferences %>% mutate_all(str_trim))
 }
 
@@ -325,7 +393,7 @@ points_allowed <- function(){
     return(tibble())
 
   pts_allow[[c("pointsAllowed", "team")]] %>%
-    modify_depth(3, as.tibble, .ragged = TRUE) %>%
+    modify_depth(3, as_tibble, .ragged = TRUE) %>%
     map( ~ bind_rows(.x$position) %>% mutate(team = unlist(.x$id))) %>%
     bind_rows() %>% spread(name, points) %>%
     modify_at(which(names(.) != "team"), as.numeric)
@@ -385,7 +453,7 @@ player_scores <- function(week = NULL, season = NULL, player_id = NULL, position
   score_list <- league_app$request(league_app$league_request("playerScores", req_param))
 
   score_list[[c("playerScores", "playerScore")]] %>%
-    map(as.tibble) %>% bind_rows() %>%
+    map(as_tibble) %>% bind_rows() %>%
     mutate(gameWeek = score_list[[c("playerScores", "week")]])
 }
 
@@ -421,7 +489,7 @@ projected_scores <- function(week = NULL,  player_id = NULL, position = NULL,
   score_list <- league_app$request(league_app$league_request("projectedScores", req_param))
 
   score_list[[c("projectedScores", "playerScore")]] %>%
-    map(as.tibble) %>% bind_rows() %>%
+    map(as_tibble) %>% bind_rows() %>%
     mutate(gameWeek = score_list[[c("projectedScores", "week")]])
 }
 
@@ -479,7 +547,7 @@ league_schedule <- function(week = NULL, franchise = NULL){
   }
 
   schedule <- schedule %>%
-    keep(~ length(.) > 0) %>% modify_depth(l_depth, as.tibble) %>%
+    keep(~ length(.) > 0) %>% modify_depth(l_depth, as_tibble) %>%
     modify_depth(l_depth - 1, bind_rows)
 
   if(is.null(week)){
@@ -495,4 +563,12 @@ league_schedule <- function(week = NULL, franchise = NULL){
     schedule %>% `names<-`(., 1:length(.)) %>%
       map(`[[`, "franchise") %>% bind_rows(.id = "matchup")
   }
+}
+
+#' Weekly Results for active league
+#'
+#' Pull the weekly results for the active league
+#' @export
+weekly_results <- function(week = NULL){
+  league_app$weekly_results(week)
 }

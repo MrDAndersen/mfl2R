@@ -4,7 +4,9 @@
 \name{mfl_app}
 \alias{mfl_app}
 \title{Generic endpoint object}
-\format{An object of class \code{mfl_app} (inherits from \code{R6}) of length 14.}
+\format{
+An object of class \code{mfl_app} (inherits from \code{R6}) of length 14.
+}
 \usage{
 mfl_app
 }

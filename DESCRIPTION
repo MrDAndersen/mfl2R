@@ -15,4 +15,5 @@ Collate:
     'league.R'
     'mfl2R.R'
     'player.R'
-RoxygenNote: 6.1.1
+    'scoring_rules.R'
+RoxygenNote: 7.1.1

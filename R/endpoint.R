@@ -11,7 +11,7 @@ mfl_endpoint <- R6::R6Class(
 
     initialize = function(scheme = "https",
                           host = "api.myfantasyleague.com",
-                          season = "2020"){
+                          season = "2021"){
       self$scheme <- scheme
       self$host <- host
       self$season <- season
@@ -35,7 +35,7 @@ mfl_endpoint <- R6::R6Class(
       login_url <- httr::modify_url("https://api.myfantasyleague.com",
                                     path = file.path(self$season, "login"),
                                     query = list(USERNAME = user_name,
-                                                 PASSWORD = RCurl::curlEscape(password),
+                                                 PASSWORD = password,
                                                  XML = "1"))
 
       login_resp <- httr::GET(login_url)
@@ -162,7 +162,7 @@ bye_weeks <- function(season = NULL, gameWeek = NULL){
   byes <- nfl_app$request(nfl_app$export_query("nflByeWeeks", url_query))
 
   byes %>% .[[c("nflByeWeeks", "team")]] %>%
-    map(as.tibble) %>% bind_rows() %>% rename(team = "id")
+    map(as_tibble) %>% bind_rows() %>% rename(team = "id")
 }
 
 #' Get NFL Schedule
@@ -177,23 +177,27 @@ bye_weeks <- function(season = NULL, gameWeek = NULL){
 #' @export nfl_schedule
 nfl_schedule <- function(season = NULL, gameWeek = NULL){
   if(is.null(season)){
-    nfl_app <- mfl_app
+    nfl_app <- mfl_app$clone()
   } else {
     nfl_app <- mfl_endpoint$new(season = season)
   }
 
   url_query <- list()
-  if(!is.null(gameWeek))
-    url_query$W <- gameWeek
+  if(is.null(gameWeek))
+    gameWeek <- "ALL"
+
+  url_query$W <- gameWeek
+
+
 
   nfl_url <- nfl_app$export_query("nflSchedule", url_query)
 
   schedule <- nfl_app$request(nfl_url)
 
-  if(gameWeek == "ALL"){
-    return(schedule$fullNflSchedule)
-  } else {
+  if(gameWeek != "ALL"){
     return(schedule$nflSchedule)
+  } else {
+    return(schedule$fullNflSchedule)
   }
 }
 
@@ -225,7 +229,7 @@ my_leagues <- function(franchise_names = FALSE){
 
   lg_list %>%
     map(~ prepend(.x, list(league_id = basename(httr::parse_url(.x$url)$path)))) %>%
-    map(as.tibble) %>% bind_rows()
+    map(as_tibble) %>% bind_rows()
 }
 
 #' Player list
@@ -254,8 +258,12 @@ players <- function(details = FALSE, since = NULL, player_id = NULL){
 
   player_list <-  mfl_app$request(player_req)$players
 
-  player_list$player %>% map(as.tibble) %>%
-    bind_rows() %>% `attr<-`("timestamp", player_list$timestamp)
+  if(is.null(player_id) || length(player_id) > 1){
+    player_list$player %>% map(as_tibble) %>%
+      bind_rows() %>% `attr<-`("timestamp", player_list$timestamp)
+  } else {
+    as_tibble(player_list$player)
+  }
 }
 
 #' Injury information
@@ -265,7 +273,21 @@ players <- function(details = FALSE, since = NULL, player_id = NULL){
 #' @export injuries
 injuries <- function(){
   mfl_app$request(mfl_app$export_query("injuries"))$injuries$injury %>%
-    map(as.tibble) %>% bind_rows() %>%
+    map(as_tibble) %>% bind_rows() %>%
     mutate(details = str_remove(details, "[:cntrl:]")) %>%
     select(id, status, details)
+}
+
+
+#' Rule Dictionary
+#'
+#' Retrieves data from MFL that describes the rules that can be applied in the
+#' leagues.
+#' @export
+rule_dictionary <- function(){
+  mfl_app$export_query(qry_type = "allRules") %>%
+    mfl_app$request() %>%
+    `[[`(c("allRules", "rule")) %>%
+    map_df(as_tibble) %>%
+    unnest(c("detailedDescription", "shortDescription", "abbreviation"))
 }

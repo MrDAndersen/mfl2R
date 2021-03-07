@@ -4,8 +4,13 @@
 \alias{projected_scores}
 \title{Projected Scores for active league}
 \usage{
-projected_scores(week = NULL, player_id = NULL, position = NULL,
-  status = NULL, count = NULL)
+projected_scores(
+  week = NULL,
+  player_id = NULL,
+  position = NULL,
+  status = NULL,
+  count = NULL
+)
 }
 \arguments{
 \item{week}{The week to get scores from}

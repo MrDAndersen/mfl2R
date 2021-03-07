@@ -4,9 +4,16 @@
 \alias{player_scores}
 \title{Player scores for active league}
 \usage{
-player_scores(week = NULL, season = NULL, player_id = NULL,
-  position = NULL, status = NULL, rules = NULL, count = NULL)
+player_scores(
+  week = NULL,
+  season = NULL,
+  player_id = NULL,
+  position = NULL,
+  status = NULL,
+  rules = NULL,
+  count = NULL
+)
 }
 \description{
-Player scores for active league
+
 }
