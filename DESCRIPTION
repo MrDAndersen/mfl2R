@@ -17,3 +17,4 @@ Collate:
     'player.R'
     'scoring_rules.R'
 RoxygenNote: 7.2.1
+URL: https://mrdandersen.github.io/mfl2R/
