@@ -26,16 +26,16 @@ that is what is scored if the value is within the range.}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{scoring_rule$new()}}
-\item \href{#method-print}{\code{scoring_rule$print()}}
-\item \href{#method-value}{\code{scoring_rule$value()}}
-\item \href{#method-match}{\code{scoring_rule$match()}}
-\item \href{#method-clone}{\code{scoring_rule$clone()}}
+\item \href{#method-scoring_rule-new}{\code{scoring_rule$new()}}
+\item \href{#method-scoring_rule-print}{\code{scoring_rule$print()}}
+\item \href{#method-scoring_rule-value}{\code{scoring_rule$value()}}
+\item \href{#method-scoring_rule-match}{\code{scoring_rule$match()}}
+\item \href{#method-scoring_rule-clone}{\code{scoring_rule$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-scoring_rule-new"></a>}}
+\if{latex}{\out{\hypertarget{method-scoring_rule-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new rule
 \subsection{Usage}{
@@ -59,8 +59,8 @@ Creates a new rule based on the event, range and points specified.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-scoring_rule-print"></a>}}
+\if{latex}{\out{\hypertarget{method-scoring_rule-print}{}}}
 \subsection{Method \code{print()}}{
 Displays Rule Details
 \subsection{Usage}{
@@ -69,8 +69,8 @@ Displays Rule Details
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-value"></a>}}
-\if{latex}{\out{\hypertarget{method-value}{}}}
+\if{html}{\out{<a id="method-scoring_rule-value"></a>}}
+\if{latex}{\out{\hypertarget{method-scoring_rule-value}{}}}
 \subsection{Method \code{value()}}{
 Calculates the value resulting from the value x happening
 for the event.
@@ -91,10 +91,10 @@ for the event.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-match"></a>}}
-\if{latex}{\out{\hypertarget{method-match}{}}}
+\if{html}{\out{<a id="method-scoring_rule-match"></a>}}
+\if{latex}{\out{\hypertarget{method-scoring_rule-match}{}}}
 \subsection{Method \code{match()}}{
-Determins if supplied event and range matches with the current rule.
+Determines if supplied event and range matches with the current rule.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{scoring_rule$match(event, range)}\if{html}{\out{</div>}}
 }
@@ -114,8 +114,8 @@ Can be used to find a specific rule
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-scoring_rule-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-scoring_rule-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

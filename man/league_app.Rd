@@ -5,7 +5,7 @@
 \alias{league_app}
 \title{Basic league object that is generated at package startup}
 \format{
-An object of class \code{league} (inherits from \code{mfl_app}, \code{R6}) of length 62.
+An object of class \code{league} (inherits from \code{mfl_app}, \code{R6}) of length 65.
 }
 \usage{
 league_app

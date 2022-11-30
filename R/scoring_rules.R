@@ -203,6 +203,9 @@ league_rules <- R6::R6Class(
 
       pos_rules <- purrr::keep(self$rules, ~ position %in% .x$positions)
 
+      if(length(pos_rules) == 0)
+        return(0)
+
       rule_vals <- purrr::map_dbl(pos_rules, ~ .x$value(x, season))
 
       purrr::reduce(rule_vals, `+`)

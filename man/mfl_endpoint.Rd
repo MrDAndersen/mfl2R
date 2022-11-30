@@ -10,34 +10,35 @@ such as logging in and generating request urls.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{mfl_endpoint$new()}}
-\item \href{#method-print}{\code{mfl_endpoint$print()}}
-\item \href{#method-login}{\code{mfl_endpoint$login()}}
-\item \href{#method-export_query}{\code{mfl_endpoint$export_query()}}
-\item \href{#method-import_query}{\code{mfl_endpoint$import_query()}}
-\item \href{#method-request}{\code{mfl_endpoint$request()}}
-\item \href{#method-export_url}{\code{mfl_endpoint$export_url()}}
-\item \href{#method-import_url}{\code{mfl_endpoint$import_url()}}
-\item \href{#method-logged_in}{\code{mfl_endpoint$logged_in()}}
-\item \href{#method-clone}{\code{mfl_endpoint$clone()}}
+\item \href{#method-mfl_app-new}{\code{mfl_endpoint$new()}}
+\item \href{#method-mfl_app-print}{\code{mfl_endpoint$print()}}
+\item \href{#method-mfl_app-login}{\code{mfl_endpoint$login()}}
+\item \href{#method-mfl_app-logout}{\code{mfl_endpoint$logout()}}
+\item \href{#method-mfl_app-export_query}{\code{mfl_endpoint$export_query()}}
+\item \href{#method-mfl_app-import_query}{\code{mfl_endpoint$import_query()}}
+\item \href{#method-mfl_app-request}{\code{mfl_endpoint$request()}}
+\item \href{#method-mfl_app-export_url}{\code{mfl_endpoint$export_url()}}
+\item \href{#method-mfl_app-import_url}{\code{mfl_endpoint$import_url()}}
+\item \href{#method-mfl_app-logged_in}{\code{mfl_endpoint$logged_in()}}
+\item \href{#method-mfl_app-clone}{\code{mfl_endpoint$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-mfl_app-new"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-new}{}}}
 \subsection{Method \code{new()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$new(
   scheme = "https",
   host = "api.myfantasyleague.com",
-  season = "2021"
+  season = current_season
 )}\if{html}{\out{</div>}}
 }
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-print"></a>}}
-\if{latex}{\out{\hypertarget{method-print}{}}}
+\if{html}{\out{<a id="method-mfl_app-print"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-print}{}}}
 \subsection{Method \code{print()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$print()}\if{html}{\out{</div>}}
@@ -45,8 +46,8 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-login"></a>}}
-\if{latex}{\out{\hypertarget{method-login}{}}}
+\if{html}{\out{<a id="method-mfl_app-login"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-login}{}}}
 \subsection{Method \code{login()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$login(user_name, password = NULL)}\if{html}{\out{</div>}}
@@ -54,8 +55,17 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-export_query"></a>}}
-\if{latex}{\out{\hypertarget{method-export_query}{}}}
+\if{html}{\out{<a id="method-mfl_app-logout"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-logout}{}}}
+\subsection{Method \code{logout()}}{
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$logout()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-mfl_app-export_query"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-export_query}{}}}
 \subsection{Method \code{export_query()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$export_query(qry_type, qry_params = list())}\if{html}{\out{</div>}}
@@ -63,8 +73,8 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-import_query"></a>}}
-\if{latex}{\out{\hypertarget{method-import_query}{}}}
+\if{html}{\out{<a id="method-mfl_app-import_query"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-import_query}{}}}
 \subsection{Method \code{import_query()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$import_query(qry_type, qry_params = list())}\if{html}{\out{</div>}}
@@ -72,8 +82,8 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-request"></a>}}
-\if{latex}{\out{\hypertarget{method-request}{}}}
+\if{html}{\out{<a id="method-mfl_app-request"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-request}{}}}
 \subsection{Method \code{request()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$request(request_url)}\if{html}{\out{</div>}}
@@ -81,8 +91,8 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-export_url"></a>}}
-\if{latex}{\out{\hypertarget{method-export_url}{}}}
+\if{html}{\out{<a id="method-mfl_app-export_url"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-export_url}{}}}
 \subsection{Method \code{export_url()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$export_url()}\if{html}{\out{</div>}}
@@ -90,8 +100,8 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-import_url"></a>}}
-\if{latex}{\out{\hypertarget{method-import_url}{}}}
+\if{html}{\out{<a id="method-mfl_app-import_url"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-import_url}{}}}
 \subsection{Method \code{import_url()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$import_url()}\if{html}{\out{</div>}}
@@ -99,8 +109,8 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-logged_in"></a>}}
-\if{latex}{\out{\hypertarget{method-logged_in}{}}}
+\if{html}{\out{<a id="method-mfl_app-logged_in"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-logged_in}{}}}
 \subsection{Method \code{logged_in()}}{
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{mfl_endpoint$logged_in()}\if{html}{\out{</div>}}
@@ -108,8 +118,8 @@ such as logging in and generating request urls.
 
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-mfl_app-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-mfl_app-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{

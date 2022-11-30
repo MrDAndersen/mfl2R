@@ -282,6 +282,22 @@ mfl_league <- R6::R6Class(
 
       self$league_request("weeklyResults", req_param) %>%
         self$request()
+    },
+    pending_trades = function(){
+      if(self$logged_in()){
+        res <- self$request(self$league_request("pendingTrades", list(JSON=1)))
+        res[[c("pendingTrades", "pendingTrade")]]
+      } else {
+        stop("Not logged in! Please log in to view your pending trades", call. = FALSE)
+      }
+    },
+    pending_waivers = function(){
+      if(self$logged_in()){
+        res <- self$request(self$league_request("pendingWaivers", list(JSON=1)))
+        res[[c("pendingWaivers", "pendingWaiver")]]
+      } else {
+        stop("Not logged in! Please log in to view your pending trades", call. = FALSE)
+      }
     }
   ),
   private = list(
@@ -571,4 +587,41 @@ league_schedule <- function(week = NULL, franchise = NULL){
 #' @export
 weekly_results <- function(week = NULL){
   league_app$weekly_results(week)
+}
+
+#' @export
+my_roster <- function(){
+  fr_id <- my_leagues() %>%
+    filter(league_id == league_app$id) %>% .$franchise_id
+
+  league_rosters() %>% filter(franchise_id == fr_id) %>% .$id
+}
+
+#' @export
+league_transactions <- function(week = NULL, type = c("WAIVER", "BBID_WAIVER", "FREE_AGENT", "WAIVER_REQUEST",
+                                                      "BBID_WAIVER_REQUEST", "TRADE", "IR", "TAXI", "AUCTION_INIT",
+                                                      "AUCTION_BID", "AUCTION_WON", "SURVIVOR_PICK", "POOL_PICK"),
+                                franchise = NULL, days = NULL, count = NULL){
+  type <- match.arg(type)
+
+  req_parm <- list(JSON=1)
+
+  if(!is.null(week))
+    req_parm$W <- week
+
+  req_parm$TRANS_TYPE <- paste(type, collapse = ",")
+
+  print(req_parm$TRANS_TYPE)
+
+  if(!is.null(franchise))
+    req_parm$FRANCHISE <- franchise
+
+  if(!is.null(days))
+    req_parm$DAYS <- days
+
+  if(!is.null(count))
+    req_parm$COUNT <- COUNT
+
+  mfl2R:::league_app$request(mfl2R:::league_app$league_request("transactions", req_parm)) %>%
+    `[[`(c("transactions", "transaction"))
 }

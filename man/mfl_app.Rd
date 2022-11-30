@@ -5,13 +5,13 @@
 \alias{mfl_app}
 \title{Generic endpoint object}
 \format{
-An object of class \code{mfl_app} (inherits from \code{R6}) of length 14.
+An object of class \code{mfl_app} (inherits from \code{R6}) of length 15.
 }
 \usage{
 mfl_app
 }
 \description{
-The enpoint is generated at package startup and provides the basis for the
+The endpoint is generated at package startup and provides the basis for the
 functions in the package.
 }
 \keyword{datasets}
