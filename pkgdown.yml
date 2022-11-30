@@ -2,7 +2,7 @@ pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-11-30T13:58Z
+last_built: 2022-11-30T15:10Z
 urls:
   reference: https://mrdandersen.github.io/mfl2R/reference
   article: https://mrdandersen.github.io/mfl2R/articles
