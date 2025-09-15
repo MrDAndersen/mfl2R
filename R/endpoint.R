@@ -1,7 +1,7 @@
 #' Season Information
 #'
 #' Information on current state of season from Sleeper.
-season_state <- httr::GET("https://api.sleeper.app/v1/state/nfl") %>% httr::content()
+#season_state <- httr::GET("https://api.sleeper.app/v1/state/nfl") %>% httr::content()
 
 current_season <- season_state$season
 current_week <- season_state$week

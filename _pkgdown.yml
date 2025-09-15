@@ -2,3 +2,46 @@ url: https://mrdandersen.github.io/mfl2R/
 template:
   bootstrap: 5
 
+reference:
+- title: "General Functions"
+  desc: "Functions to retrieve general information from MFL"
+  contents:
+  - average_draft
+  - injuries
+  - mfl_app
+  - mfl_endpoint
+  - player_profile
+  - player_ranks
+  - players
+  - rule_dictionary
+  - season_state
+  - set_season
+
+- title: "League Specific functions"
+  desc: "Function to retrieve league specific information. Requires setting a league ID"
+  contents:
+  - conferences
+  - divisions
+  - franchises
+  - free_agents
+  - starts_with("league_")
+  - player_scores
+  - projected_scores
+  - points_allowed
+  - scoring_rule
+  - set_league
+  - starters
+  - weekly_results
+
+- title: "User functions"
+  desc: "Functions related to specific user"
+  contents:
+  - mfl_login
+  - my_leagues
+
+- title: "NFL specific information"
+  desc: "NFL related information"
+  contents:
+  - bye_weeks
+  - injuries
+  - nfl_schedule
